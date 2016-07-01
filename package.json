@@ -1,0 +1,22 @@
+{
+  "name": "twitterfootbot",
+  "version": "0.0.1",
+  "description": "Twitter boot which provides informations about football results",
+  "main": "twitterFootBot.js",
+  "dependencies": {
+    "twit": "^2.2.4",
+    "request": "^2.72.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "football",
+    "twitter",
+    "bot",
+    "results"
+  ],
+  "author": "alexandrepa",
+  "license": "MIT"
+}
