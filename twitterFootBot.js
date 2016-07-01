@@ -1,13 +1,15 @@
-var Twit = require('twit')
-
+var Twit = require('twit');
+var jsonfile = require('jsonfile');
+var parameters = require("./parameters.json");
+console.log(parameters.twitter.consumer_key);
 var T = new Twit({
-  consumer_key:         '',
-  consumer_secret:      '',
-  access_token:         '',
-  access_token_secret:  '',
+  consumer_key:         parameters.twitter.consumer_key,
+  consumer_secret:      parameters.twitter.consumer_secret,
+  access_token:         parameters.twitter.access_token,
+  access_token_secret:  parameters.twitter.access_token_secret,
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 })
-var lastID = 742038727405473792;//cette variable contient l'ID du dernier tweet auquel on a répondu
+parameters.twitter.lastID;//cette variable contient l'ID du dernier tweet auquel on a répondu
 
 var request = require('request');// dependance qui va permetttre de crée des requetes facilement
 
@@ -47,9 +49,9 @@ Cette fonction permet de récuperer l'ID de la ligue qui est la ligue 1 dans foo
 function getLigue(idLigue){
 
   var options = {
-    url: 'http://api.football-data.org/v1/soccerseasons',
+    url: 'http://api.football-data.org/v1/soccerseasons?season=2015',
     headers: {
-      'X-Auth-Token': '' //on renseigne ce token qui permet de nous authentifier auprès de football-data.
+      'X-Auth-Token': parameters.footballdata.token //on renseigne ce token qui permet de nous authentifier auprès de football-data.
     }
   };
 
@@ -94,7 +96,7 @@ function getMatchs(idLigue,Matchs){
   var options = {
     url: 'http://api.football-data.org/v1/soccerseasons/'+idLigue+'/fixtures',
     headers: {
-      'X-Auth-Token': ''
+      'X-Auth-Token': parameters.footballdata.token
     }
   };
   function callback(error, response, body) {
@@ -162,8 +164,8 @@ function boot(){
       /*
       On récupère les différentes mentions depuis lastID
       */
-T.get('statuses/mentions_timeline',{since_id:lastID} ,  function (err, data, response) {
-
+T.get('statuses/mentions_timeline',{since_id:parameters.twitter.lastID} ,  function (err, data, response) {
+console.log(data);
 	if(data !== undefined){
     /*
     On va traiter chaque mention pour essayer d'y répondre
@@ -202,10 +204,13 @@ T.get('statuses/mentions_timeline',{since_id:lastID} ,  function (err, data, res
 		console.log("Tweet envoyé à : "+data2.in_reply_to_screen_name);
 		console.log("Tweet : "+data2.text);
 		console.log(" ");
-	  lastID=data2.id_str;//l'id du tweet auquel on a répondu devient le dernier tweet
+	  parameters.twitter.lastID=data2.id_str;//l'id du tweet auquel on a répondu devient le dernier tweet
     })
 
   }
+  jsonfile.writeFile("parameters.json", parameters, {spaces: 2}, function(err) {
+    console.error(err)
+  });
 	}
 })
 });

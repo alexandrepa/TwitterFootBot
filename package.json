@@ -4,8 +4,9 @@
   "description": "Twitter boot which provides informations about football results",
   "main": "twitterFootBot.js",
   "dependencies": {
-    "twit": "^2.2.4",
-    "request": "^2.72.0"
+    "jsonfile": "^2.3.1",
+    "request": "^2.72.0",
+    "twit": "^2.2.4"
   },
   "devDependencies": {},
   "scripts": {
